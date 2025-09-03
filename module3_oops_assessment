@@ -1,0 +1,104 @@
+#include <iostream>
+#include <cmath>  
+#include <string>
+using namespace std;
+
+class EventOrganiser {
+private:
+    string eventName;
+    string firstName, lastName;
+    int numGuests, numMinutes;
+    int numServers;
+    const double COST_PER_HOUR = 18.50;
+    const double COST_PER_MINUTE = 0.40;
+    const double COST_OF_DINNER = 20.70;
+
+public:
+    EventOrganiser(string eName, string fName, string lName, int guests, int minutes) {
+        eventName = eName;
+        firstName = fName;
+        lastName = lName;
+        numGuests = guests;
+        numMinutes = minutes;
+        numServers = calculateServers();
+    }
+
+    int calculateServers() {
+        return (int)ceil((double)numGuests / 20);
+    }
+
+
+    double costForOneServer() {
+        int hours = numMinutes / 60;
+        int minutesLeft = numMinutes % 60;
+        double cost1 = hours * COST_PER_HOUR;
+        double cost2 = minutesLeft * COST_PER_MINUTE;
+        return cost1 + cost2;
+    }
+
+
+    double totalFoodCost() {
+        return numGuests * COST_OF_DINNER;
+    }
+
+   
+    double averageCostPerPerson() {
+        return totalFoodCost() / numGuests;
+    }
+
+    double totalCost() {
+        return totalFoodCost() + (costForOneServer() * numServers);
+    }
+
+    double depositAmount() {
+        return totalCost() * 0.25;
+    }
+
+
+    void displayDetails() {
+        cout << "====== Event Cost Estimation ======" << endl;
+        cout << "Event: " << eventName << endl;
+        cout << "Organiser: " << firstName << " " << lastName << endl;
+        cout << "Number of Guests: " << numGuests << endl;
+        cout << "Number of Minutes: " << numMinutes << endl;
+        cout << "Number of Servers: " << numServers << endl;
+        cout << "Cost for One Server: $" << costForOneServer() << endl;
+        cout << "Total Food Cost: $" << totalFoodCost() << endl;
+        cout << "Average Cost Per Person: $" << averageCostPerPerson() << endl;
+        cout << "Total Cost: $" << totalCost() << endl;
+        cout << "Deposit Amount (25%): $" << depositAmount() << endl;
+        cout << "==============================" << endl;
+    }
+};
+
+int main() {
+    string eventName, firstName, lastName;
+    int guests, minutes;
+
+    cout << "Enter the name of the event: ";
+    getline(cin, eventName);
+    cout << "Enter your First Name: ";
+    getline(cin, firstName);
+    cout << "Enter your Last Name: ";
+    getline(cin, lastName);
+
+    do {
+        cout << "Enter Number of Guests: ";
+        cin >> guests;
+        if (guests <= 0)
+            cout << "Guests must be greater than zero. Please try again.\n";
+    } while (guests <= 0);
+
+    do {
+        cout << "Enter Number of Minutes: ";
+        cin >> minutes;
+        if (minutes <= 0)
+            cout << "Minutes must be greater than zero. Please try again.\n";
+    } while (minutes <= 0);
+
+    EventOrganiser event(eventName, firstName, lastName, guests, minutes);
+
+    event.displayDetails();
+
+    return 0;
+}

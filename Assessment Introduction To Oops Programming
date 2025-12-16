@@ -1,0 +1,65 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+class Event {
+private:
+    string eventName;
+    string firstName, lastName;
+    int numberOfGuests;
+    int numberOfMinutes;
+
+    const double CostPerHour = 18.50;
+    const double CostPerMinute = 0.40;
+    const double CostOfDinner = 20.70;
+
+public:
+
+    void getInput() {
+        cout << "Enter Event Name: ";
+        cin >> eventName;
+
+        cout << "Enter First Name: ";
+        cin >> firstName;
+
+        cout << "Enter Last Name: ";
+        cin >> lastName;
+
+        cout << "Enter Number of Guests: ";
+        cin >> numberOfGuests;
+
+        cout << "Enter Number of Minutes: ";
+        cin >> numberOfMinutes;
+    }
+
+    void calculateCost() {
+        int numberOfServers = ceil(numberOfGuests / 20.0);
+
+        double cost1 = (numberOfMinutes / 60) * CostPerHour;
+        double cost2 = (numberOfMinutes % 60) * CostPerMinute;
+        double costForOneServer = cost1 + cost2;
+
+        double totalFoodCost = numberOfGuests * CostOfDinner;
+        double averageCost = totalFoodCost / numberOfGuests;
+        double totalCost = totalFoodCost + (costForOneServer * numberOfServers);
+        double depositAmount = totalCost * 0.25;
+
+        cout << "\n------ Event Cost Estimation ------" << endl;
+        cout << "Event Name: " << eventName << endl;
+        cout << "Customer Name: " << firstName << " " << lastName << endl;
+        cout << "Number of Guests: " << numberOfGuests << endl;
+        cout << "Number of Servers Required: " << numberOfServers << endl;
+        cout << "Cost for One Server: " << costForOneServer << endl;
+        cout << "Total Food Cost: " << totalFoodCost << endl;
+        cout << "Average Cost Per Person: " << averageCost << endl;
+        cout << "Total Event Cost: " << totalCost << endl;
+        cout << "Deposit Amount (25%): " << depositAmount << endl;
+    }
+};
+
+int main() {
+    Event e;        
+    e.getInput();     
+    e.calculateCost();
+    return 0;
+}

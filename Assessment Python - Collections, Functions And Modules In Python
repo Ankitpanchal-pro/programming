@@ -1,0 +1,97 @@
+import datetime
+
+inventory = {
+    "Paracetamol": {"price": 20, "stock": 50},
+    "Cough Syrup": {"price": 80, "stock": 30},
+    "Vitamin C": {"price": 60, "stock": 40}
+}
+
+sales = []
+
+def view_inventory():
+    print("\n------ Current Inventory ------")
+    print("{:<15} {:<10} {:<10}".format("Medicine", "Price", "Stock"))
+    print("-" * 35)
+    for med, details in inventory.items():
+        print("{:<15} {:<10} {:<10}".format(
+            med, details["price"], details["stock"]))
+    print("-" * 35)
+
+def add_update_medicine():
+    try:
+        name = input("Enter medicine name: ").strip()
+        price = float(input("Enter price: "))
+        stock = int(input("Enter stock quantity: "))
+
+        if name in inventory:
+            inventory[name]["price"] = price
+            inventory[name]["stock"] += stock
+            print("Medicine updated successfully.")
+        else:
+            inventory[name] = {"price": price, "stock": stock}
+            print("New medicine added successfully.")
+
+    except ValueError:
+        print("Invalid input! Please enter correct values.")
+
+def process_sale():
+    try:
+        customer = input("Customer name: ").strip()
+        medicine = input("Medicine name: ").strip()
+        quantity = int(input("Quantity: "))
+
+        if medicine not in inventory:
+            print("Medicine not available.")
+            return
+
+        if inventory[medicine]["stock"] < quantity:
+            print("Insufficient stock available.")
+            return
+
+        total = inventory[medicine]["price"] * quantity
+        inventory[medicine]["stock"] -= quantity
+
+        sale = {
+            "customer": customer,
+            "medicine": medicine,
+            "quantity": quantity,
+            "total": total,
+            "date": datetime.date.today()
+        }
+        sales.append(sale)
+
+        print("\n------ BILL ------")
+        print(f"Customer : {customer}")
+        print(f"Medicine : {medicine}")
+        print(f"Quantity : {quantity}")
+        print(f"Total ₹  : {total}")
+        print(f"Date     : {sale['date']}")
+        print("------------------")
+
+    except ValueError:
+        print("Invalid quantity entered.")
+
+def main_menu():
+    while True:
+        print("\n====== MediTrack Menu ======")
+        print("1. View Inventory")
+        print("2. Add / Update Medicine")
+        print("3. Process Sale")
+        print("4. Exit")
+
+        choice = input("Enter choice (1-4): ")
+
+        if choice == "1":
+            view_inventory()
+        elif choice == "2":
+            add_update_medicine()
+        elif choice == "3":
+            process_sale()
+        elif choice == "4":
+            print("Thank you for using MediTrack!")
+            break
+        else:
+            print("Invalid choice. Try again.")
+
+
+main_menu()
